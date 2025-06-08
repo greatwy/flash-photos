@@ -114,13 +114,22 @@ define('VIEW_TIME', 3); // 查看时间(秒)
 如果使用Nginx，确保配置中包含以下内容以处理PHP：
 
 text
+
 location ~ \.php$ {
+
     fastcgi_pass unix:/tmp/php-cgi-74.sock; # 根据实际PHP版本调整
+    
     fastcgi_index index.php;
+    
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    
     include fastcgi_params;
+    
 }
+
 第五部分：测试和使用
+
+
 访问您的网站域名
 
 上传一张测试图片
