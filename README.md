@@ -78,14 +78,23 @@ PHP版本选择7.4+
 
 目录结构
 text
+
 ├── index.php          # 首页和上传处理
+
 ├── view.php           # 图片查看页面
+
 ├── config.php         # 数据库配置
+
 ├── functions.php      # 公用函数
+
 ├── assets/            # 静态资源目录
+
 │   ├── style.css      # 样式表
+
 │   └── script.js      # 前端脚本
+
 └── uploads/           # 图片存储目录（需设置777权限）
+
 
 数据库配置
 define('DB_HOST', 'localhost');
