@@ -22,4 +22,134 @@
 总之，这款软件通过独特的图片上传、加密、限时查看以及服务器定时清理等功能，为用户提供了一种高效、安全且私密的图片分享方式，满足了用户在不同场景下对于图片分享和隐私保护的需求。
 
 # 演示链接:      https://kingqi.serv00.net
+
+# 三秒闪照系统搭建教程（宝塔面板版）
+
+本教程将指导您如何使用服务器配合宝塔面板搭建一个三秒闪照系统，用户可以上传图片并获得分享链接，查看者点击链接后图片只显示3秒，之后自动销毁。
+
+第一部分：环境准备
+1. 服务器准备
+一台Linux服务器（推荐CentOS 7/8或Ubuntu 18.04/20.04）
+
+确保服务器已开放80和443端口
+
+2. 安装宝塔面板
+如果尚未安装宝塔面板，请执行以下命令安装：
+
+bash
+# CentOS系统
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install_6.0.sh && sh install.sh
+
+# Ubuntu/Debian系统
+wget -O install.sh http://download.bt.cn/install/install-ubuntu_6.0.sh && sudo bash install.sh
+安装完成后，记下面板地址、用户名和密码。
+
+第二部分：环境配置
+1. 登录宝塔面板
+通过浏览器访问宝塔面板地址，使用安装时提供的用户名和密码登录。
+
+2. 安装必要软件
+在宝塔面板中安装以下软件：
+
+Nginx（推荐1.18+）
+
+MySQL（推荐5.7+）
+
+PHP（推荐7.4+）
+
+phpMyAdmin（可选，方便管理数据库）
+
+3. 创建网站
+点击左侧"网站"菜单
+
+点击"添加站点"
+
+填写域名（如果没有域名，可以使用服务器IP）
+
+选择创建MySQL数据库，记录数据库名、用户名和密码
+
+PHP版本选择7.4+
+
+点击"提交"
+
+第三部分：代码部署
+1. 上传代码文件
+在网站根目录（通常是/www/wwwroot/您的域名）删除默认文件，上传以下文件：
+
+目录结构
+text
+├── index.php          # 首页和上传处理
+├── view.php           # 图片查看页面
+├── config.php         # 数据库配置
+├── functions.php      # 公用函数
+├── assets/            # 静态资源目录
+│   ├── style.css      # 样式表
+│   └── script.js      # 前端脚本
+└── uploads/           # 图片存储目录（需设置777权限）
+
+数据库配置
+define('DB_HOST', 'localhost');
+define('DB_NAME', '您的数据库名');
+define('DB_USER', '您的数据库用户');
+define('DB_PASS', '您的数据库密码');
+
+// 网站配置
+define('SITE_URL', 'http://您的域名/'); // 结尾带斜杠
+define('UPLOAD_DIR', 'uploads/');
+define('VIEW_TIME', 3); // 查看时间(秒)
+
+第四部分：权限和配置
+1. 设置目录权限
+在宝塔面板中：
+
+进入文件管理器
+
+找到您的网站根目录
+
+右键点击"uploads"文件夹，选择"权限"
+
+设置为777权限（确保PHP可以写入）
+
+2. 配置Nginx（可选）
+如果使用Nginx，确保配置中包含以下内容以处理PHP：
+
+text
+location ~ \.php$ {
+    fastcgi_pass unix:/tmp/php-cgi-74.sock; # 根据实际PHP版本调整
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+第五部分：测试和使用
+访问您的网站域名
+
+上传一张测试图片
+
+复制生成的分享链接
+
+在新窗口打开链接，确认图片显示3秒后消失
+
+刷新页面确认图片已无法查看
+
+安全注意事项
+定期清理uploads目录中的过期图片
+
+可以添加宝塔防火墙规则限制频繁上传
+
+考虑添加验证码防止滥用
+
+对于生产环境，建议配置HTTPS加密传输
+
+扩展功能建议
+添加密码保护功能
+
+实现阅后即焚通知（当图片被查看时通知上传者）
+
+添加API接口供其他系统调用
+
+实现统计功能（查看次数等）
+
+至此，您的三秒闪照系统已搭建完成！用户可以通过您的网站上传图片并获得只能查看3秒的分享链接。
+
+
            
